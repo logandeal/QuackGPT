@@ -1,0 +1,58 @@
+html {
+    background-color: #004040;
+    color: #ffffff;
+}
+
+body {
+    padding: 10px;
+    padding-top: 30px;
+}
+
+button {
+    margin: 0px;
+    position: fixed;
+    top: 0px;
+    height: 50px;
+    width: 50px;
+    text-align: center;
+    background-color: #008080;
+    border: none;
+}
+
+button:active {
+    background-color: #00A0A0;
+}
+
+.menu {
+    display: none;
+    position: fixed;
+    top: 50px;
+    height: 200px;
+    width: 200px;
+    background-color: #00A0A0;
+}
+
+#nav-bar {
+    height: 50px;
+    width: 100%;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    background-color: #008080;
+}
+
+#left-menu-button {
+    left: 0px;
+}
+
+#right-menu-button {
+    right: 0px;
+}
+
+#left-menu {
+    left: 0px;
+}
+
+#right-menu {
+    right: 0px;
+}

@@ -8,12 +8,22 @@
       content="default-src 'self'; script-src 'self'"
     />
     <title>QuackGPT</title>
+    <link rel="stylesheet" href="global.css">
   </head>
   <body>
-    <h1>Hello World!</h1>
-    We are using Node.js <span id="node-version"></span>, Chromium
-    <span id="chrome-version"></span>, and Electron
-    <span id="electron-version"></span>.
+    <div id="nav-bar">
+      <button id="left-menu-button">L</button>
+      <button id="right-menu-button">R</button>
+      <div class="menu" id="left-menu"></div>
+      <div class="menu" id="right-menu"></div>
+    </div>
+
+    <div id="body">
+      <h1>Hello World!</h1>
+      We are using Node.js <span id="node-version"></span>, Chromium
+      <span id="chrome-version"></span>, and Electron
+      <span id="electron-version"></span>.
+    </div>
 
     <!-- You can also require other files to run in this process -->
     <script src="./renderer.js"></script>
