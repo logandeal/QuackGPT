@@ -1,3 +1,4 @@
+/*
 .App {
   display: flex;
   flex-direction: column;
@@ -63,3 +64,96 @@ button {
 button:hover {
   background-color: #0056b3;
 }
+*/
+
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: 20px;
+  background-color: #f0f0f0;
+  font-family: Arial, sans-serif;
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  width: 80%; /* Set the chat window to fill up 80% of the screen width */
+  height: 70vh; /* Set the chat window to fill up 70% of the screen height */
+  overflow-y: scroll;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 20px;
+  background-color: #fff;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.message {
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  max-width: 70%;
+}
+
+.user {
+  align-self: flex-end;
+  background-color: #007bff;
+  color: white;
+}
+
+.bot {
+  align-self: flex-start;
+  background-color: #4caf50;
+  color: white;
+}
+
+.input-container {
+  display: flex;
+}
+
+input[type="text"] {
+  flex: 1;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px 0 0 4px;
+  border-right: none;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: #fff;
+  border: 1px solid #007bff;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Hide scrollbar */
+.chat-container::-webkit-scrollbar {
+  width: 0;
+}
+
+/* Hide scrollbar for Firefox */
+.chat-container {
+  scrollbar-width: none;
+}
+
+/* Auto-scroll */
+.chat-container {
+  scroll-behavior: smooth;
+}
+
+.chat-container.auto-scroll {
+  scroll-behavior: smooth;
+  overflow-y: auto;
+}
+
