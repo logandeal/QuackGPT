@@ -91,7 +91,6 @@ function App() {
 
   useEffect(() => {
     if (messages[messages.length - 1]?.sender === 'user') {
-      // Simulate response from ChatGPT
       setTimeout(() => {
         addMessage('I am just a demo. Go fuck yourself.', 'bot');
         setIsSending(false);
