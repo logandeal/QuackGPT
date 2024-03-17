@@ -1,11 +1,4 @@
-export default function(){
-    return(
-        <h1>Home Page</h1>
-    )
-}
-
 import React, { useState, useEffect, useRef } from 'react';
-import './App.css';
 
 function App() {
   const [messages, setMessages] = useState([]);
@@ -99,7 +92,7 @@ function App() {
     if (messages[messages.length - 1]?.sender === 'user') {
       // Simulate response from ChatGPT
       setTimeout(() => {
-        addMessage('I am just a demo. Go fuck yourself.', 'bot');
+        addMessage('I am just a demo.', 'bot');
         setIsSending(false);
       }, 1000);
     }
@@ -123,7 +116,7 @@ function App() {
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
           onKeyPress={handleKeyPress}
-          placeholder="Enter your fucking query here..."
+          placeholder="Enter your query here..."
           disabled={isSending}
           ref={inputRef}
           autoFocus // Automatically focus the input field when component mounts
