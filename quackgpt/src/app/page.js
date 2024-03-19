@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { Backend } from "./backend";
 
 export default function Login() {
   const [username, setUsername] = useState("");
@@ -62,6 +63,8 @@ export default function Login() {
           ></input>
           <input type="submit" value="Login"></input>
         </form>
+        <br />
+        <Backend />
       </div>
     </>
   );

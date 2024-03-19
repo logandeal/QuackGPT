@@ -3,6 +3,7 @@ const serve = require("electron-serve");
 const path = require("path");
 const mongodb = require("../src/lib/mongodb");
 const User = require("../src/model/schema");
+const crypto = require("crypto");
 
 const appServe = app.isPackaged
   ? serve({
@@ -34,33 +35,39 @@ const createWindow = () => {
   return win;
 };
 
+const createCredentialCookies = async (win, status, username, password) => {
+  const { session } = win.webContents;
+  await session.cookies.set({
+    name: "status",
+    value: status,
+    url: "http://localhost:3000",
+  });
+  await session.cookies.set({
+    name: "username",
+    value: username,
+    url: "http://localhost:3000",
+  });
+  await session.cookies.set({
+    name: "password_hash",
+    value: crypto.createHash("sha256").update(password).digest("hex"),
+    url: "http://localhost:3000",
+  });
+  win.loadURL("http://localhost:3000");
+};
+
 app.on("ready", () => {
   const win = createWindow();
 
-  ipcMain.on("login", async (_, { username, password }) => {
-    // TODO: make API call back to next instead of calling mongo directly
-    await mongodb.connect();
-    const user = await User.findOne({ username, password });
-    if (user) {
-      // TODO: create session record for user
-      // win.webContents.send("navigate-to", "/home");
-      win.loadURL("http://localhost:3000/home");
-      // return a redirect
+  ipcMain.on("register", async (_, { username, password }) => {
+    createCredentialCookies(win, "register", username, password);
+  });
 
-      const { session } = win.webContents;
-      await session.cookies.set({
-        name: "username",
-        value: username,
-        url: "http://localhost:3000",
-      });
-      await session.cookies.set({
-        name: "password",
-        value: password,
-        url: "http://localhost:3000",
-      });
-    } else {
-      console.log("PROBLEM");
-    }
+  ipcMain.on("login", async (_, { username, password }) => {
+    createCredentialCookies(win, "login", username, password);
+  });
+
+  ipcMain.on("route-to-home", () => {
+    win.loadURL("http://localhost:3000/home");
   });
 });
 
