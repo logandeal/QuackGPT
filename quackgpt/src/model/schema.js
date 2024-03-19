@@ -12,4 +12,14 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("User", userSchema);
+const usernameSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+});
+
+const User = mongoose.models.User || mongoose.model("User", userSchema);
+
+module.exports = { User };

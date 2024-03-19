@@ -4,7 +4,7 @@
   "private": true,
   "main": "main/main.js",
   "author": "QuackGPT Innovators",
-  "description": "QuackGPT default silo",
+  "description": "QuackGPT project",
   "scripts": {
     "dev": "concurrently -n \"NEXT,ELECTRON\" -c \"yellow,blue\" --kill-others \"next dev\" \"electron .\"",
     "next-dev": "next dev",

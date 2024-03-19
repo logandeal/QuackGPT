@@ -1,21 +1,33 @@
-const mongodb = require("@/src/lib/mongodb");
-const User = require("@/src/model/schema");
+const { User } = require("@/src/model/schema");
 const { cookies } = require("next/headers");
+import mongoose from "mongoose";
+import { redirect } from "next/navigation";
 
-export async function Backend() {
+const connection = {};
+
+export default async function Backend() {
+  if (!connection.isConnected) {
+    const db = await mongoose.connect(process.env.MONGODB_URI);
+    connection.isConnected = db.connections[0].readyState;
+  }
+
   const cookieStore = cookies();
 
   if (!cookieStore.get("status")) {
     return "";
   }
 
-  await mongodb.connect();
-
   const status = cookieStore.get("status").value;
   const username = cookieStore.get("username").value;
   const password_hash = cookieStore.get("password_hash").value;
 
   if (status == "register") {
+    console.log("hello", username);
+    const userAlreadyExists = await User.findOne({ username });
+    console.log(userAlreadyExists);
+    if (userAlreadyExists) {
+      return "Username already taken.";
+    }
     const user = await User.create({
       username: username,
       password: password_hash,
@@ -23,14 +35,17 @@ export async function Backend() {
     if (!user) {
       return "Problem with registering.";
     }
-    return <div>Successful registration. User {username} created.</div>;
+    return <p>Successful registration. User {username} created.</p>;
   } else if (status == "login") {
-    const user = await User.findOne({ username, password_hash });
+    console.log(username, password_hash);
+    const user = await User.findOne({
+      username: username,
+      password: password_hash,
+    });
+    console.log(user);
     if (!user) {
       return "Can't find user.";
     }
+    redirect("/home");
   }
-
-  // @ts-ignore
-  window.electronAPI.send("route-to-home");
 }

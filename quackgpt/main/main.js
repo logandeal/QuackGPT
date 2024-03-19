@@ -1,8 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const serve = require("electron-serve");
 const path = require("path");
-const mongodb = require("../src/lib/mongodb");
-const User = require("../src/model/schema");
 const crypto = require("crypto");
 
 const appServe = app.isPackaged
@@ -64,10 +62,6 @@ app.on("ready", () => {
 
   ipcMain.on("login", async (_, { username, password }) => {
     createCredentialCookies(win, "login", username, password);
-  });
-
-  ipcMain.on("route-to-home", () => {
-    win.loadURL("http://localhost:3000/home");
   });
 });
 
