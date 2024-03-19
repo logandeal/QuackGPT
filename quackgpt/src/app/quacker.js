@@ -1,12 +1,16 @@
 const gpt_tokenizer = require('gpt-tokenizer/cjs/model/gpt-3.5-turbo')
 const OpenAI = require('openai')
 
-const apiKey = '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'
-const org = 'org-68QuWVk4cgE92XSCY3hpiDyl'
-const openai = new OpenAI({
-    apiKey: apiKey,
-    organization: org
-})
+// const apiKey = process.env.GPT_API_KEY
+// const org = process.env.GPT_API_ORG
+
+// console.log(apiKey)
+// console.log(org)
+
+// const openai = new OpenAI({
+//     apiKey: apiKey,
+//     organization: org
+// })
 
 // models will be tried in sorted order
 const models = [
@@ -21,9 +25,13 @@ const models = [
 ]
 
 class Quacker {
-    constructor(initialContext = "You are acting as a programmer's rubber duck. Programmers often talk to rubber ducks to work through problems. You will be asked programming questions, but you may also be chatted with in English. Please answer these questions as helpfully as possible, but also as briefly as possible. If you don't have enough information, ask for whatever you need.") {
+    constructor(apiKey, organization, initialContext = "You are acting as a programmer's rubber duck. Programmers often talk to rubber ducks to work through problems. You will be asked programming questions, but you may also be chatted with in English. Please answer these questions as helpfully as possible, but also as briefly as possible. If you don't have enough information, ask for whatever you need.") {
         this.messages = [{role: "system", content: initialContext}]
         this.model = models[0]
+        this.openai = new OpenAI({
+            apiKey: apiKey,
+            organization: org
+        })
     }
 
     addMessage(newMessage) {

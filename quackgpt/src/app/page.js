@@ -1,5 +1,5 @@
 import React from "react";
-import Backend from "./backend";
+import { Backend } from "./backend";
 import Login from "./login";
 
 export default function Landing() {

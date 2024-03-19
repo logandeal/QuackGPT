@@ -2,10 +2,17 @@ const { User } = require("@/src/model/schema");
 const { cookies } = require("next/headers");
 import mongoose from "mongoose";
 import { redirect } from "next/navigation";
+import { Quacker } from "./quacker";
 
 const connection = {};
+const apiKey = process.env.GPT_API_KEY
+const org = process.env.GPT_API_ORG
 
-export default async function Backend() {
+export async function useQuacker() {
+  return new Quacker(apiKey, org);
+}
+
+export async function Backend() {
   if (!connection.isConnected) {
     const db = await mongoose.connect(process.env.MONGODB_URI);
     connection.isConnected = db.connections[0].readyState;

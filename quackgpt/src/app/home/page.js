@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import { useQuacker } from "../backend";
 
 export function Home() {
   const [messages, setMessages] = useState([]);
@@ -8,6 +9,7 @@ export function Home() {
   const [isSending, setIsSending] = useState(false);
   const inputRef = useRef(null);
   const chatContainerRef = useRef(null);
+  const quacker = useQuacker();
 
   useEffect(() => {
     if (!("webkitSpeechRecognition" in window)) {
@@ -36,7 +38,11 @@ export function Home() {
 
   const addMessage = (text, sender) => {
     const newMessage = { text, sender };
-    setMessages([...messages, newMessage]);
+    const newMessages = [...messages, newMessage];
+    setMessages(newMessages);
+    if (sender != 'assistant') {
+      quacker.addMessage(newMessage);
+    }
   };
 
   const handleSendMessage = () => {
@@ -91,13 +97,11 @@ export function Home() {
     }
   }, [messages]);
 
-  useEffect(() => {
+  useEffect(async () => {
     if (messages[messages.length - 1]?.sender === "user") {
-      // Simulate response from ChatGPT
-      setTimeout(() => {
-        addMessage("I am just a demo.", "bot");
-        setIsSending(false);
-      }, 1000);
+      let gptResponse = await quacker.getFirstResponse();
+      addMessage(gptResponse, "assistant");
+      setIsSending(false);
     }
   }, [messages]);
 
