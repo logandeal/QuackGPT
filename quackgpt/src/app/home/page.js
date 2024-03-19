@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import './page.css';
 
 export function Home() {
   const [messages, setMessages] = useState([]);
