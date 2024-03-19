@@ -4,20 +4,28 @@
   "private": true,
   "main": "main/main.js",
   "author": "QuackGPT Innovators",
-  "description": "QuackGPT default silo",
+  "description": "QuackGPT project",
   "scripts": {
     "dev": "concurrently -n \"NEXT,ELECTRON\" -c \"yellow,blue\" --kill-others \"next dev\" \"electron .\"",
+    "next-dev": "next dev",
     "build": "next build && electron-builder",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "aws4": "^1.12.0",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.4.5",
     "electron-serve": "^1.3.0",
-    "next": "14.1.0",
+    "express": "^4.18.3",
+    "mongodb": "^6.5.0",
+    "mongoose": "^8.2.2",
+    "next": "^14.1.3",
     "react": "^18",
     "react-dom": "^18"
   },
   "devDependencies": {
+    "@types/react": "18.2.66",
     "concurrently": "^8.2.2",
     "electron": "^29.0.0",
     "electron-builder": "^24.12.0",
