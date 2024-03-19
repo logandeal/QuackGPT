@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import './page.css';
 import { useQuacker } from "../backend";
 
 export function Home() {
