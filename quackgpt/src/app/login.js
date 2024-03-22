@@ -21,48 +21,54 @@ export default function Login() {
 
   return (
     <>
-      <div>
-        <h1>Register</h1>
-        <form onSubmit={handleRegister}>
-          <label>Username</label>
-          <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          ></input>
-          <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          ></input>
-          <input type="submit" value="Register"></input>
-        </form>
-
-        <h1>Login</h1>
-        <form onSubmit={handleLogin}>
-          <label>Username</label>
-          <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          ></input>
-          <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          ></input>
-          <input type="submit" value="Login"></input>
-        </form>
+      <div className="LoginPage">
+        <div className="Register">
+          <h1>Register</h1>
+          <form onSubmit={handleRegister}>
+            <label>Username</label>
+            <input
+              type="text"
+              name="username"
+              placeholder="Username"
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            ></input>
+            <label>Password</label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            ></input>
+            <input type="submit" value="Register"></input>
+          </form>
+        </div>
+        {/* <div className="Logo">
+          <img src="./QuackGPT logo.svg" alt="QuackGPT logo.svg"/>
+        </div> */}
+        <div className="Login">
+          <h1>Login</h1>
+          <form onSubmit={handleLogin}>
+            <label>Username</label>
+            <input
+              type="text"
+              name="username"
+              placeholder="Username"
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            ></input>
+            <label>Password</label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            ></input>
+            <input type="submit" value="Login"></input>
+          </form>
+        </div>
       </div>
     </>
   );
