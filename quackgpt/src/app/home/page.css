@@ -1,6 +1,5 @@
-
-
 .App {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -32,7 +31,7 @@
   align-self: flex-end;
 }
 
-.message.bot {
+.message.assistant {
   background-color: #e6e6e6; /* Light gray */
   align-self: flex-start;
 }
@@ -60,7 +59,13 @@ button {
   cursor: pointer;
 }
 
+form {
+  display: flex;
+  flex: 1;
+}
+
 input[type="text"] {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   flex: 1;
   margin-right: 10px;
 }

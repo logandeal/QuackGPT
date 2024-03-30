@@ -1,5 +1,5 @@
-const gpt_tokenizer = require("gpt-tokenizer/cjs/model/gpt-3.5-turbo");
-const OpenAI = require("openai");
+import gpt_tokenizer from "gpt-tokenizer/cjs/model/gpt-3.5-turbo";
+import OpenAI from "openai";
 
 // const apiKey = process.env.GPT_API_KEY
 // const org = process.env.GPT_API_ORG
@@ -124,4 +124,4 @@ class TooBigToSumError extends Error {
   }
 }
 
-module.exports = Quacker;
+export default Quacker;

@@ -1,94 +1,16 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import './page.css';
-import { useQuacker } from "../backend";
+import "./page.css";
 
-export function Home() {
-  const [messages, setMessages] = useState([]);
-  const [inputText, setInputText] = useState("");
-  const [isSending, setIsSending] = useState(false);
+import { useChat } from "ai/react";
+
+export default function Home() {
+  const formRef = useRef(null);
   const inputRef = useRef(null);
   const chatContainerRef = useRef(null);
-  const quacker = useQuacker();
-
-  useEffect(() => {
-    if (!("webkitSpeechRecognition" in window)) {
-      console.error("Speech recognition not supported");
-      return;
-    }
-
-    const recognition = new window.webkitSpeechRecognition();
-    recognition.continuous = false;
-    recognition.interimResults = false;
-
-    recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      setInputText(transcript);
-      handleSendMessage();
-    };
-
-    recognition.onerror = (event) => {
-      console.error("Speech recognition error:", event.error);
-    };
-
-    return () => {
-      recognition.stop();
-    };
-  }, []);
-
-  const addMessage = (text, sender) => {
-    const newMessage = { text, sender };
-    const newMessages = [...messages, newMessage];
-    setMessages(newMessages);
-    if (sender != 'assistant') {
-      quacker.addMessage(newMessage);
-    }
-  };
-
-  const handleSendMessage = () => {
-    if (inputText.trim() === "" || isSending) return;
-
-    setIsSending(true);
-    addMessage(inputText, "user");
-    setInputText("");
-    inputRef.current.focus(); // Explicitly focus on the input field after sending a message
-  };
-
-  const handleKeyPress = (event) => {
-    if (event.key === "Enter") {
-      handleSendMessage();
-    }
-  };
-
-  const handleMicrophoneClick = () => {
-    if (!("webkitSpeechRecognition" in window)) {
-      console.error("Speech recognition not supported");
-      return;
-    }
-
-    setIsSending(true);
-    setInputText("");
-    const recognition = new window.webkitSpeechRecognition();
-    recognition.continuous = false;
-    recognition.interimResults = false;
-
-    recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      setInputText(transcript);
-      handleSendMessage();
-    };
-
-    recognition.onerror = (event) => {
-      console.error("Speech recognition error:", event.error);
-    };
-
-    recognition.onend = () => {
-      setIsSending(false);
-    };
-
-    recognition.start();
-  };
+  const { messages, input, handleInputChange, handleSubmit, isLoading } =
+    useChat();
 
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -98,47 +20,77 @@ export function Home() {
     }
   }, [messages]);
 
-  useEffect(async () => {
-    if (messages[messages.length - 1]?.sender === "user") {
-      let gptResponse = await quacker.getFirstResponse();
-      addMessage(gptResponse, "assistant");
-      setIsSending(false);
-    }
-  }, [messages]);
+  function handleSendMessage(e, chatRequestOptions) {
+    handleSubmit(e, chatRequestOptions);
+    inputRef.current.focus(); // Explicitly focus on the input field after sending a message
+  }
+
+  // const handleMicrophoneClick = () => {
+  //   if (!("webkitSpeechRecognition" in window)) {
+  //     console.error("Speech recognition not supported");
+  //     return;
+  //   }
+
+  //   const recognition = new window.webkitSpeechRecognition();
+  //   recognition.continuous = false;
+  //   recognition.interimResults = false;
+
+  //   recognition.onresult = (event) => {
+  //     const transcript = event.results[0][0].transcript;
+  //     inputRef.current.value = transcript;
+  //     formRef.current.submit();
+  //   };
+
+  //   recognition.onerror = (event) => {
+  //     console.error("Speech recognition error:", event.error);
+  //   };
+
+  //   recognition.onend = () => {};
+
+  //   recognition.start();
+  // };
 
   return (
     <div className="App">
       <div className="chat-container" ref={chatContainerRef}>
-        {messages.map((message, index) => (
-          <div key={index} className={`message ${message.sender}`}>
-            {message.text}
+        {messages.map((message) => (
+          <div
+            key={message.id}
+            className={`whitespace-pre-wrap message ${message.role}`}
+          >
+            {message.role === "user" ? "User: " : "QuackGPT: "}
+            {message.content}
           </div>
         ))}
       </div>
       <div className="input-container">
-        <button
-          className="microphone-button"
-          onClick={handleMicrophoneClick}
-          disabled={isSending}
-        >
-          🎤
-        </button>
-        <input
-          type="text"
-          value={inputText}
-          onChange={(e) => setInputText(e.target.value)}
-          onKeyPress={handleKeyPress}
-          placeholder="Enter your query here..."
-          disabled={isSending}
-          ref={inputRef}
-          autoFocus // Automatically focus the input field when component mounts
-        />
-        <button onClick={handleSendMessage} disabled={isSending}>
-          {isSending ? "Sending..." : "Send"}
-        </button>
+        <form onSubmit={handleSendMessage} ref={formRef}>
+          {/* <button
+            type="button"
+            className="microphone-button"
+            onClick={handleMicrophoneClick}
+            disabled={isLoading}
+          >
+            🎤
+          </button> */}
+          <input
+            type="text"
+            className="fixed bottom-0 w-full max-w-md p-2 mb-8 border border-gray-300 rounded shadow-xl"
+            value={input}
+            placeholder="Talk to the duck here..."
+            onChange={handleInputChange}
+            ref={inputRef}
+            autoFocus
+          />
+          <button
+            onClick={handleSendMessage}
+            disabled={isLoading}
+            type="submit"
+          >
+            {isLoading ? "Sending..." : "Send"}
+          </button>
+        </form>
       </div>
     </div>
   );
 }
-
-export default Home;
