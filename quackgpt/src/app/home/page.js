@@ -1,16 +1,26 @@
 "use client";
 
+// @ts-ignore
 import React, { useState, useEffect, useRef } from "react";
 import "./page.css";
 
 import { useChat } from "ai/react";
 
+const CODE_LOAD_ID = "code_load";
+
 export default function Home() {
   const formRef = useRef(null);
   const inputRef = useRef(null);
   const chatContainerRef = useRef(null);
-  const { messages, input, handleInputChange, handleSubmit, isLoading } =
-    useChat();
+  const {
+    messages,
+    input,
+    handleInputChange,
+    handleSubmit,
+    append,
+    isLoading,
+    setMessages,
+  } = useChat();
 
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -50,10 +60,54 @@ export default function Home() {
   //   recognition.start();
   // };
 
+  useEffect(() => {
+    // @ts-ignore
+    return window.electronAPI.on("open-file-result", (event, data) => {
+      setMessages([
+        {
+          id: `${CODE_LOAD_ID}`,
+          role: "user",
+          content: `
+I want you to answer questions about my codebase.
+Following is a tree structure of the files in my codebase:
+
+\`\`\`
+${JSON.stringify(data.fileTree)}
+\`\`\`
+
+You are acting as a programmer's funny rubber duck.
+Programmers often talk to rubber ducks to work through problems.
+Please answer these questions as helpfully as possible, but also as briefly as possible.
+Hint at the user what they need to do. Do not give the user an exact answer.
+If you don't have enough information, ask for whatever you need.
+`.trim(),
+        },
+        {
+          id: `${Date.now()}`,
+          role: "assistant",
+          content:
+            "Your code is now loaded, and I am ready to answer any questions you have.",
+        },
+      ]);
+    });
+  }, []);
+
+  function handleCodebasePick() {
+    // @ts-ignore
+    window.electronAPI.send("open-file-dialog");
+  }
+
+  const filteredMessages = messages.filter(
+    (message) => message.id !== CODE_LOAD_ID
+  );
+
   return (
     <div className="App">
+      <button onClick={handleCodebasePick} className="codebase-button">
+        Select your codebase
+      </button>
       <div className="chat-container" ref={chatContainerRef}>
-        {messages.map((message) => (
+        {filteredMessages.map((message) => (
           <div
             key={message.id}
             className={`whitespace-pre-wrap message ${message.role}`}
@@ -75,9 +129,8 @@ export default function Home() {
           </button> */}
           <input
             type="text"
-            className="fixed bottom-0 w-full max-w-md p-2 mb-8 border border-gray-300 rounded shadow-xl"
             value={input}
-            placeholder="Talk to the duck here..."
+            placeholder="Talk to the rubber duck here..."
             onChange={handleInputChange}
             ref={inputRef}
             autoFocus
@@ -87,7 +140,7 @@ export default function Home() {
             disabled={isLoading}
             type="submit"
           >
-            {isLoading ? "Sending..." : "Send"}
+            {isLoading ? "Loading..." : "Send"}
           </button>
         </form>
       </div>

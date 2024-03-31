@@ -52,6 +52,11 @@ button {
   border-radius: 5px;
 }
 
+.codebase-button {
+  margin: 20px;
+  background-color: #008080;
+}
+
 .microphone-button {
   background-color: #4caf50; /* Green */
   color: #ffffff;
@@ -71,7 +76,7 @@ input[type="text"] {
 }
 
 button {
-  background-color: #007bff; /* Blue */
+  background-color: #008080; /* Blue */
   color: #ffffff;
   cursor: pointer;
 }

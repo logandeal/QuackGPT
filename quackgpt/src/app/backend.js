@@ -5,8 +5,8 @@ import { redirect } from "next/navigation";
 // import { Quacker } from "./quacker";
 
 const connection = {};
-const apiKey = process.env.GPT_API_KEY;
-const org = process.env.GPT_API_ORG;
+// const apiKey = process.env.GPT_API_KEY;
+// const org = process.env.GPT_API_ORG;
 
 // export async function useQuacker() {
 //   return new Quacker(apiKey, org);
