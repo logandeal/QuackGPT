@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "concurrently -n \"NEXT,ELECTRON\" -c \"yellow,blue\" --kill-others \"next dev\" \"electron .\"",
     "next-dev": "next dev",
-    "build": "ELECTRON_ENV=production next build && electron-builder",
+    "build": "next build && electron-builder -mw",
     "start": "next start",
     "lint": "next lint"
   },
