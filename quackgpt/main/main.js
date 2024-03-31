@@ -3,12 +3,13 @@ const serve = require("electron-serve");
 const path = require("path");
 const crypto = require("crypto");
 const dirTree = require("directory-tree");
-const env = process.env.NODE_ENV || "development";
 const fs = require("fs");
-const server_url = "http://localhost:3000"; // TODO: Change this to Vercel deployment!
+const server_url = app.isPackaged
+  ? "https://quackgpt.vercel.app"
+  : "http://localhost:3000";
 
 // If development environment
-if (env === "development") {
+if (!app.isPackaged) {
   // @ts-ignore
   require("electron-reload")(__dirname, {
     electron: path.join(__dirname, "..", "node_modules", ".bin", "electron"),
@@ -31,17 +32,13 @@ const createWindow = () => {
     },
   });
 
-  if (app.isPackaged) {
-    appServe(win).then(() => {
-      win.loadURL("app://-");
-    });
-  } else {
-    win.loadURL(server_url);
+  win.loadURL(server_url);
+  if (!app.isPackaged) {
     win.webContents.openDevTools();
-    win.webContents.on("did-fail-load", (e, code, desc) => {
-      win.webContents.reloadIgnoringCache();
-    });
   }
+  win.webContents.on("did-fail-load", (e, code, desc) => {
+    win.webContents.reloadIgnoringCache();
+  });
 
   return win;
 };
@@ -115,7 +112,5 @@ app.on("ready", () => {
 });
 
 app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
-    app.quit();
-  }
+  app.quit();
 });
