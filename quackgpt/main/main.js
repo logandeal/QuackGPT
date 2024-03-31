@@ -5,7 +5,7 @@ const crypto = require("crypto");
 const dirTree = require("directory-tree");
 const env = process.env.NODE_ENV || "development";
 const fs = require("fs");
-const server_url = "localhost:3000"; // TODO: Change this to Vercel deployment!
+const server_url = "http://localhost:3000"; // TODO: Change this to Vercel deployment!
 
 // If development environment
 if (env === "development") {
