@@ -1,8 +1,24 @@
 import React from "react";
 import { Backend } from "./backend";
 import Login from "./login";
+import pkg from "../../package.json";
 
 export default function Landing() {
+  // @ts-ignore
+  if (!window.electronAPI) {
+    return (
+      <div>
+        <ul>
+          <li>
+            <a href={`/downloads/QuackGPT-${pkg.version}-arm64.dmg`}>Mac</a>
+          </li>
+          <li>
+            <a href={`/downloads/QuackGPT ${pkg.version}`}>Windows</a>
+          </li>
+        </ul>
+      </div>
+    );
+  }
   return (
     <>
       <div>

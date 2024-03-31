@@ -186,6 +186,3 @@ thumb
 sketch
 
 # End of https://www.toptal.com/developers/gitignore/api/nextjs,node,react
-
-# Don't commit downloads if we build them locally
-quackgpt/public/downloads
