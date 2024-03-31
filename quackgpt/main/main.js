@@ -5,6 +5,7 @@ const crypto = require("crypto");
 const dirTree = require("directory-tree");
 const env = process.env.NODE_ENV || "development";
 const fs = require("fs");
+const server_url = "localhost:3000"; // TODO: Change this to Vercel deployment!
 
 // If development environment
 if (env === "development") {
@@ -35,7 +36,7 @@ const createWindow = () => {
       win.loadURL("app://-");
     });
   } else {
-    win.loadURL("http://localhost:3000");
+    win.loadURL(server_url);
     win.webContents.openDevTools();
     win.webContents.on("did-fail-load", (e, code, desc) => {
       win.webContents.reloadIgnoringCache();
@@ -50,19 +51,20 @@ const createCredentialCookies = async (win, status, username, password) => {
   await session.cookies.set({
     name: "status",
     value: status,
-    url: "http://localhost:3000",
+    url: server_url,
   });
   await session.cookies.set({
     name: "username",
     value: username,
-    url: "http://localhost:3000",
+    url: server_url,
   });
   await session.cookies.set({
     name: "password_hash",
     value: crypto.createHash("sha256").update(password).digest("hex"),
-    url: "http://localhost:3000",
+    url: server_url,
   });
-  win.loadURL("http://localhost:3000");
+  // Reload so that cookies can be accessed
+  win.loadURL(server_url);
 };
 
 app.on("ready", () => {
