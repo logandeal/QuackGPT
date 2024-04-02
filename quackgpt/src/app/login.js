@@ -44,9 +44,9 @@ export default function Login() {
             <input type="submit" value="Register"></input>
           </form>
         </div>
-        {/* <div className="Logo">
+        <div className="Logo">
           <img src="./QuackGPT logo.svg" alt="QuackGPT logo.svg"/>
-        </div> */}
+        </div>
         <div className="Login">
           <h1>Login</h1>
           <form onSubmit={handleLogin}>
