@@ -42,7 +42,7 @@ export async function Backend() {
       username: username,
       password: password_hash,
     });
-    console.log(user);
+    console.log(user); //May want to remove this in final product???
     if (!user) {
       return "Can't find user.";
     }

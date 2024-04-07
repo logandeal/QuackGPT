@@ -92,6 +92,10 @@ If you don't have enough information, ask for whatever you need.
     });
   }, []);
 
+  function handleBackClick(){
+    // @ts-ignore
+  }
+
   function handleCodebasePick() {
     // @ts-ignore
     window.electronAPI.send("open-file-dialog");
@@ -103,9 +107,17 @@ If you don't have enough information, ask for whatever you need.
 
   return (
     <div className="App">
-      <button onClick={handleCodebasePick} className="codebase-button">
-        Select your codebase
-      </button>
+      <div className="topButtons">
+        <button onClick={handleBackClick} className="backButton">
+          <div className="backBox">
+            <div className="backArrow"></div>
+            <div>Back</div>
+          </div>
+        </button>
+        <button onClick={handleCodebasePick} className="codebase-button">
+          Select your codebase
+        </button>
+      </div>
       <div className="chat-container" ref={chatContainerRef}>
         {filteredMessages.map((message) => (
           <div
