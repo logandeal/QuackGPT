@@ -32,6 +32,22 @@ const createWindow = () => {
     },
   });
 
+  // possible modification to createWindow function
+  /*
+
+const createWindow = () => {
+  const win = new BrowserWindow({
+    width: 800,
+    height: 600,
+    webPreferences: {
+      preload: path.join(__dirname, "preload.js"),
+      nodeIntegration: true,
+      enableRemoteModule: true,
+    },
+  });
+
+  */
+
   win.loadURL(server_url);
   if (!app.isPackaged) {
     win.webContents.openDevTools();
