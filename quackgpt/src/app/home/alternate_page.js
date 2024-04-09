@@ -2,7 +2,7 @@
 
 // @ts-ignore
 import React, { useState, useEffect, useRef } from "react";
-import "./page.css";
+// import "./page.css";
 
 import { useChat } from "ai/react";
 
