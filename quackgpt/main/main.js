@@ -83,6 +83,18 @@ const createCredentialCookies = async (win, status, username, password) => {
 app.on("ready", () => {
   const win = createWindow();
 
+  ipcMain.on("save_messages", async (_, {messages, username}) => {
+    if(! fs.existsSync("Data")){
+      fs.mkdirSync("Data");
+    }
+    let filePath = "Data/" + username + ".json";
+    fs.writeFile(filePath, JSON.stringify(messages), (error) =>{
+      if (error){
+        console.log(error);
+      }
+    });
+  })
+
   ipcMain.on("register", async (_, { username, password }) => {
     createCredentialCookies(win, "register", username, password);
   });
@@ -91,7 +103,28 @@ app.on("ready", () => {
     createCredentialCookies(win, "login", username, password);
   });
 
+  ipcMain.on('request-data', (event, arg) => {
+    let filePath = "Data/" + arg + ".json";
+    let checkExists = true;
+    if(! fs.existsSync("Data")){
+      fs.mkdirSync("Data");
+      fs.writeFileSync(filePath, JSON.stringify([]));
+      checkExists = false;
+    }
+    var messages = JSON.stringify([])
+    if(checkExists){
+      fs.readFile(filePath, 'utf8', function(err, data){
+        messages = data;
+        event.sender.send('reply-data', messages);
+      });
+    }
+    else{
+      event.sender.send('reply-data', JSON.stringify([]));
+    }
+  });
+
   ipcMain.on("open-file-dialog", async (event) => {
+    console.log("here");
     try {
       const result = await dialog.showOpenDialog(win, {
         properties: ["openFile", "openDirectory"],

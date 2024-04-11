@@ -6,7 +6,6 @@ import "./page.css";
 
 import { useChat } from "ai/react";
 import { useCookies } from "react-cookie";
-
 import { useRouter } from "next/navigation";
 
 const CODE_LOAD_ID = "code_load";
@@ -14,6 +13,7 @@ const CODE_LOAD_ID = "code_load";
 export default function Home() {
   const router = useRouter();
   const [cookies,setCookie,removeCookie] = useCookies();
+  const username = cookies.username;
   const formRef = useRef(null);
   const inputRef = useRef(null);
   const chatContainerRef = useRef(null);
@@ -66,6 +66,17 @@ export default function Home() {
   // };
 
   useEffect(() => {
+
+    // @ts-ignore
+    window.electronAPI.send('request-data', username);
+
+    // Listen for a response from the main process
+    // @ts-ignore
+    window.electronAPI.on('reply-data', (event, data) => {
+      let oldMessages = JSON.parse(data);
+      setMessages(oldMessages);
+    });
+
     // @ts-ignore
     return window.electronAPI.on("open-file-result", (event, data) => {
       setMessages([
@@ -98,11 +109,12 @@ If you don't have enough information, ask for whatever you need.
   }, []);
 
   function handleBackClick(){
+    // @ts-ignore
+    window.electronAPI.send("save_messages", {messages, username})
     removeCookie("username")
     removeCookie("status")
     removeCookie("password_hash");
     router.push('/');
-    // @ts-ignore
   }
 
   function handleCodebasePick() {

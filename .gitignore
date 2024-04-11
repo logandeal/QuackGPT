@@ -7,6 +7,9 @@
 /.pnp
 .pnp.js
 
+# json message saving 
+Data
+
 # testing
 /coverage
 

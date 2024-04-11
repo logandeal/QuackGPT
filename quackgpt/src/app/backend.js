@@ -37,12 +37,12 @@ export async function Backend() {
     }
     return <p>Successful registration. User {username} created.</p>;
   } else if (status == "login") {
-    console.log(username, password_hash);
+    //console.log(username, password_hash);
     const user = await User.findOne({
       username: username,
       password: password_hash,
     });
-    console.log(user); //May want to remove this in final product???
+    //console.log(user); //May want to remove this in final product???
     if (!user) {
       return "Can't find user.";
     }
