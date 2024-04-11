@@ -5,10 +5,15 @@ import React, { useState, useEffect, useRef } from "react";
 import "./page.css";
 
 import { useChat } from "ai/react";
+import { useCookies } from "react-cookie";
+
+import { useRouter } from "next/navigation";
 
 const CODE_LOAD_ID = "code_load";
 
 export default function Home() {
+  const router = useRouter();
+  const [cookies,setCookie,removeCookie] = useCookies();
   const formRef = useRef(null);
   const inputRef = useRef(null);
   const chatContainerRef = useRef(null);
@@ -93,6 +98,10 @@ If you don't have enough information, ask for whatever you need.
   }, []);
 
   function handleBackClick(){
+    removeCookie("username")
+    removeCookie("status")
+    removeCookie("password_hash");
+    router.push('/');
     // @ts-ignore
   }
 
