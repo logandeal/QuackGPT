@@ -73,8 +73,10 @@ export default function Home() {
     // Listen for a response from the main process
     // @ts-ignore
     window.electronAPI.on('reply-data', (event, data) => {
-      let oldMessages = JSON.parse(data);
-      setMessages(oldMessages);
+      if(data != undefined){
+        let oldMessages = JSON.parse(data);
+        setMessages(oldMessages);
+      }
     });
 
     // @ts-ignore
