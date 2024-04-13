@@ -6,15 +6,15 @@ import { redirect } from "next/navigation";
 const connection = {};
 
 export async function Backend() {
-  if (!connection.isConnected) {
-    const db = await mongoose.connect(process.env.MONGODB_URI);
-    connection.isConnected = db.connections[0].readyState;
-  }
-
   const cookieStore = cookies();
 
   if (!cookieStore.get("status")) {
     return "";
+  }
+
+  if (!connection.isConnected) {
+    const db = await mongoose.connect(process.env.MONGODB_URI);
+    connection.isConnected = db.connections[0].readyState;
   }
 
   const status = cookieStore.get("status").value;

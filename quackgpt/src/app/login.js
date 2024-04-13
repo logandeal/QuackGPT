@@ -2,10 +2,33 @@
 
 import React, { useState } from "react";
 import "./login.css";
+import pkg from "../../package.json";
 
-export default function Login() {
+export default function LoginOrDownload() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  // @ts-ignore
+  if (typeof window !== "undefined" && window && !window.electronAPI) {
+    // if not in Electron
+    return (
+      <div className="Downloads">
+        <ul>
+          <li>
+            <a href={`/downloads/QuackGPT-${pkg.version}-arm64.dmg`}>
+              Download for Mac
+            </a>
+          </li>
+          <br />
+          <li>
+            <a href={`/downloads/QuackGPT ${pkg.version}`}>
+              Download for Windows
+            </a>
+          </li>
+        </ul>
+      </div>
+    );
+  }
 
   const handleRegister = (e) => {
     e.preventDefault();
@@ -45,7 +68,7 @@ export default function Login() {
           </form>
         </div>
         <div className="Logo">
-          <img src="./QuackGPT logo.svg" alt="QuackGPT logo.svg"/>
+          <img src="./QuackGPT logo.svg" alt="QuackGPT logo.svg" />
         </div>
         <div className="Login">
           <h1>Login</h1>
