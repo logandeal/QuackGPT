@@ -12,7 +12,7 @@ const CODE_LOAD_ID = "code_load";
 
 export default function Home() {
   const router = useRouter();
-  const [cookies,setCookie,removeCookie] = useCookies();
+  const [cookies, setCookie, removeCookie] = useCookies();
   const username = cookies.username;
   const formRef = useRef(null);
   const inputRef = useRef(null);
@@ -66,14 +66,13 @@ export default function Home() {
   // };
 
   useEffect(() => {
-
     // @ts-ignore
-    window.electronAPI.send('request-data', username);
+    window.electronAPI.send("request-data", username);
 
     // Listen for a response from the main process
     // @ts-ignore
-    window.electronAPI.on('reply-data', (event, data) => {
-      if(data != undefined){
+    window.electronAPI.on("reply-data", (event, data) => {
+      if (data != undefined) {
         let oldMessages = JSON.parse(data);
         setMessages(oldMessages);
       }
@@ -110,13 +109,13 @@ If you don't have enough information, ask for whatever you need.
     });
   }, []);
 
-  function handleBackClick(){
+  function handleBackClick() {
     // @ts-ignore
-    window.electronAPI.send("save_messages", {messages, username})
-    removeCookie("username")
-    removeCookie("status")
+    window.electronAPI.send("save_messages", { messages, username });
+    removeCookie("username");
+    removeCookie("status");
     removeCookie("password_hash");
-    router.push('/');
+    router.push("/");
   }
 
   function handleCodebasePick() {
