@@ -15,14 +15,16 @@ export default function LoginOrDownload() {
       <div className="Downloads">
         <ul>
           <li>
-            <a href={`/downloads/QuackGPT-${pkg.version}-arm64.dmg`}>
+            <a
+              href={`https://github.com/logandeal/QuackGPT/releases/download/v${pkg.version}/quackgpt-darwin-arm64-0.1.0.zip`}
+            >
               Download for Mac
             </a>
           </li>
           <br />
           <li>
-            <a href={`/downloads/QuackGPT ${pkg.version}`}>
-              Download for Windows
+            <a href={`https://github.com/logandeal/QuackGPT/releases`}>
+              Download for Windows (coming soon)
             </a>
           </li>
         </ul>
