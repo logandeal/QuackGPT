@@ -123,7 +123,6 @@ app.on("ready", () => {
   });
 
   ipcMain.on("open-file-dialog", async (event) => {
-    console.log("here");
     try {
       const result = await dialog.showOpenDialog(win, {
         properties: ["openFile", "openDirectory"],
@@ -138,6 +137,7 @@ app.on("ready", () => {
             extensions:
               /\.(js|ts|py|c|cpp|h|hpp|java|html|css|json|md|cs|php|rb)$/,
             attributes: ["size", "type", "extension"],
+            exclude: /node_modules/,
           },
           (item, path, stats) => {
             const content = fs.readFileSync(path).toString();

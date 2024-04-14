@@ -154,7 +154,7 @@ If you don't have enough information, ask for whatever you need.
         <button onClick={handleBackClick} className="backButton">
           <div className="backBox">
             <div className="backArrow"></div>
-            <div>Back</div>
+            <div>Save and Logout</div>
           </div>
         </button>
         <button onClick={handleCodebasePick} className="codebase-button">
