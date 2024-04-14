@@ -1,6 +1,7 @@
 import OpenAI from "openai";
 import { OpenAIStream, StreamingTextResponse } from "ai";
-const { GPTTokens } = require('gpt-tokens');
+import { NextResponse } from "next/server";
+const { GPTTokens } = require("gpt-tokens");
 
 // Create an OpenAI API client (that's edge friendly!)
 const openai = new OpenAI({
@@ -12,8 +13,8 @@ function isWithinTokenLimit(model, messages, maxContext) {
   const gptTokens = new GPTTokens({
     model,
     messages,
-  })
-  console.log(gptTokens.usedTokens)
+  });
+  console.log(gptTokens.usedTokens);
   return gptTokens.usedTokens < maxContext;
 }
 
@@ -21,6 +22,9 @@ function isWithinTokenLimit(model, messages, maxContext) {
 export const runtime = "edge";
 
 export async function POST(req) {
+  const { searchParams } = new URL(req.url);
+  const checkContextLimit = searchParams.get("checkContextLimit") === "true";
+
   const { messages } = await req.json();
   const models = [
     {
@@ -33,16 +37,22 @@ export async function POST(req) {
     },
   ];
 
-  // set model based on token count
-  let model = null
+  // Set model based on token count
+  let model = null;
   for (let i = 0; i < models.length; i++) {
     if (isWithinTokenLimit(models[i].name, messages, models[i].maxContext)) {
-      model = models[i].name
-      break
+      model = models[i].name;
+      break;
     }
   }
+  if (checkContextLimit) {
+    // Check for when checkContextLimit is set
+    return NextResponse.json({
+      isWithinTokenLimit: model != null,
+    });
+  }
   if (model == null) {
-    throw new Error("Stop here please")
+    throw new Error("Stop here please");
   }
 
   // Ask OpenAI for a streaming chat completion given the prompt

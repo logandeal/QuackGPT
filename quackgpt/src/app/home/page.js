@@ -27,6 +27,8 @@ export default function Home() {
     setMessages,
   } = useChat();
 
+  const [isCodebaseTooLarge, setIsCodebaseTooLarge] = useState(false);
+
   useEffect(() => {
     if (chatContainerRef.current) {
       // Automatically scroll down when new message is added
@@ -79,8 +81,12 @@ export default function Home() {
     });
 
     // @ts-ignore
-    return window.electronAPI.on("open-file-result", (event, data) => {
-      setMessages([
+    return window.electronAPI.on("open-file-result", async (event, data) => {
+      setIsCodebaseTooLarge(false);
+      /**
+       * @type {Array<{id: string, role: "function" | "user" | "assistant" | "system" | "data" | "tool", content: string}>}
+       */
+      const messages = [
         {
           id: `${CODE_LOAD_ID}`,
           role: "user",
@@ -105,7 +111,22 @@ If you don't have enough information, ask for whatever you need.
           content:
             "Your code is now loaded, and I am ready to answer any questions you have.",
         },
-      ]);
+      ];
+
+      // TODO: call token API to check if messages goes over context limit with checkContextLimit = true
+      // Check size of codebase limit
+      const response = await fetch("/api/chat?checkContextLimit=true", {
+        method: "POST",
+        body: JSON.stringify({ messages }),
+      });
+      const responseJson = await response.json();
+      console.log(responseJson);
+
+      if (responseJson.isWithinTokenLimit) {
+        setMessages(messages);
+      } else {
+        setIsCodebaseTooLarge(true);
+      }
     });
   }, []);
 
@@ -140,6 +161,11 @@ If you don't have enough information, ask for whatever you need.
           Select your codebase
         </button>
       </div>
+      {isCodebaseTooLarge && (
+        <p className="codebase-indicator">
+          Codebase too large! Please try a different codebase.
+        </p>
+      )}
       <div className="chat-container" ref={chatContainerRef}>
         {filteredMessages.map((message) => (
           <div
