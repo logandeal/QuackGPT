@@ -4,6 +4,8 @@ const path = require("path");
 const crypto = require("crypto");
 const dirTree = require("directory-tree");
 const fs = require("fs");
+const { Whisper } = require("node-whisper"); // Import node-whisper for speech recognition
+
 const server_url = app.isPackaged
   ? "https://quackgpt.vercel.app"
   : "http://localhost:3000";
@@ -29,24 +31,10 @@ const createWindow = () => {
     height: 600,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
-    },
-  });
-
-  // possible modification to createWindow function
-  /*
-
-const createWindow = () => {
-  const win = new BrowserWindow({
-    width: 800,
-    height: 600,
-    webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
       nodeIntegration: true,
       enableRemoteModule: true,
     },
   });
-
-  */
 
   win.loadURL(server_url);
   if (!app.isPackaged) {
@@ -82,6 +70,12 @@ const createCredentialCookies = async (win, status, username, password) => {
 
 app.on("ready", () => {
   const win = createWindow();
+
+  // Initialize node-whisper
+  const whisper = new Whisper({
+    apiKey: OPEN_AI_KEY,
+    stop: ["\n", "QuackGPT:"], // Stop conditions for generating responses
+  });
 
   ipcMain.on("save_messages", async (_, { messages, username }) => {
     if (!fs.existsSync("Data")) {
@@ -137,7 +131,6 @@ app.on("ready", () => {
             extensions:
               /\.(js|ts|py|c|cpp|h|hpp|java|html|css|json|md|cs|php|rb)$/,
             attributes: ["size", "type", "extension"],
-            exclude: /node_modules/,
           },
           (item, path, stats) => {
             const content = fs.readFileSync(path).toString();
@@ -156,6 +149,13 @@ app.on("ready", () => {
     } catch (err) {
       console.log(err);
     }
+  });
+
+  ipcMain.on("startRecording", async (event) => {
+    const recognizer = whisper.createRecognizer(); // Create a recognizer instance
+    recognizer.startStreaming((data) => {
+      event.sender.send("transcription", data); // Send transcription back to renderer process
+    });
   });
 });
 
