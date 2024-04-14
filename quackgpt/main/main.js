@@ -73,7 +73,7 @@ app.on("ready", () => {
 
   // Initialize node-whisper
   const whisper = new Whisper({
-    apiKey: OPEN_AI_KEY,
+    apiKey: OPENAI_API_KEY,
     stop: ["\n", "QuackGPT:"], // Stop conditions for generating responses
   });
 
