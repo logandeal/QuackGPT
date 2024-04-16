@@ -17,6 +17,25 @@ if (!app.isPackaged) {
   });
 }
 
+function getAppDataPath() {
+  const homedir = require('os').homedir();
+  switch (process.platform) {
+    case "darwin": {
+      return path.join(homedir, "Library", "Application Support", "Data");
+    }
+    case "win32": {
+      return path.join(homedir, "Your app name");
+    }
+    case "linux": {
+      return path.join(homedir, ".Your app name");
+    }
+    default: {
+      console.log("Unsupported platform!");
+      process.exit(1);
+    }
+  }
+}
+
 const appServe = app.isPackaged
   ? serve({
       directory: path.join(__dirname, "../out"),
@@ -84,10 +103,11 @@ app.on("ready", () => {
   const win = createWindow();
 
   ipcMain.on("save_messages", async (_, { messages, username }) => {
-    if (!fs.existsSync("Data")) {
-      fs.mkdirSync("Data");
+    const appDatatDirPath = getAppDataPath();
+    let filePath = appDatatDirPath + "/" + username + ".json";
+    if (!fs.existsSync(appDatatDirPath)) {
+      fs.mkdirSync(appDatatDirPath);
     }
-    let filePath = "Data/" + username + ".json";
     fs.writeFile(filePath, JSON.stringify(messages), (error) => {
       if (error) {
         console.log(error);
@@ -104,7 +124,9 @@ app.on("ready", () => {
   });
 
   ipcMain.on("request-data", (event, arg) => {
-    let filePath = "Data/" + arg + ".json";
+    const appDatatDirPath = getAppDataPath();
+    let filePath = appDatatDirPath + "/" + arg + ".json";
+    console.log(filePath);
     let checkExists = true;
     if (!fs.existsSync("Data")) {
       fs.mkdirSync("Data");
