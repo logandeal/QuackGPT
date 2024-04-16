@@ -133,8 +133,8 @@ app.on("ready", () => {
     let filePath = appDatatDirPath + "/" + arg + ".json";
     console.log(filePath);
     let checkExists = true;
-    if (!fs.existsSync("Data")) {
-      fs.mkdirSync("Data");
+    if (!fs.existsSync(filePath)) {
+      fs.mkdirSync(filePath);
       fs.writeFileSync(filePath, JSON.stringify([]));
       checkExists = false;
     }
