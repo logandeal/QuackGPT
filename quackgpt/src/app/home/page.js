@@ -54,17 +54,21 @@ export default function Home() {
     console.log(duckImgRef.current)
     handleSubmit(e, chatRequestOptions);
     setTimeout(() => {
-      console.log(duckImgRef.current)
-      duckImgRef.current.src = './duck_idea.svg';
-      duckImgRef.current.alt = 'Idea Duck';
-      console.log(duckImgRef.current)
-      inputRef.current.focus(); // Explicitly focus on the input field after sending a message
-      setTimeout(() => {
+      if(duckImgRef.current != null){
         console.log(duckImgRef.current)
-        duckImgRef.current.src = './duck_neutral.svg';
-        duckImgRef.current.alt = 'Neutral Duck';
+        duckImgRef.current.src = './duck_idea.svg';
+        duckImgRef.current.alt = 'Idea Duck';
         console.log(duckImgRef.current)
-      }, 2000);
+        inputRef.current.focus(); // Explicitly focus on the input field after sending a message
+        setTimeout(() => {
+          if(duckImgRef.current != null){
+            console.log(duckImgRef.current)
+            duckImgRef.current.src = './duck_neutral.svg';
+            duckImgRef.current.alt = 'Neutral Duck';
+            console.log(duckImgRef.current)
+          }
+        }, 2000);
+      }
     }, 2000);
   }
 
@@ -217,7 +221,7 @@ If you don't have enough information, ask for it.
             key={message.id}
             className={`whitespace-pre-wrap message ${message.role}`}
           >
-            {message.role === "user" ? `${username}: ` : "QuackGPT: "}
+            {message.role === "user" ? "You: " : "QuackGPT: "}
             {message.content}
           </div>
         ))}
