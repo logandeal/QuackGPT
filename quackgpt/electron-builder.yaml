@@ -8,5 +8,5 @@ linux:
   target: ["dir", "appimage", "zip"]
   icon: "resources/icon.png"
 mac:
-  target: ["dir", "dmg", "zip"]
+  target: ["dir", "zip"]
   icon: "resources/icon.icns"

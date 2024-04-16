@@ -7,6 +7,9 @@
 /.pnp
 .pnp.js
 
+# json message saving 
+Data
+
 # testing
 /coverage
 
@@ -113,6 +116,7 @@ web_modules/
 .env.test.local
 .env.production.local
 .env.local
+.envrc
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache

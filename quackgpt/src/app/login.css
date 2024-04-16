@@ -1,0 +1,96 @@
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #008080;
+}
+
+.Logo {
+  display: flex;
+  min-height: 50vh;
+  max-width: 35vw;
+  width: 30%;
+  justify-content: center;
+}
+
+.Logo img {
+  min-height: 50vh;
+  max-width: 35vw;
+}
+
+.LoginPage {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  height: 100vh;
+  flex-wrap: wrap;
+  align-content: center;
+}
+
+.Register,
+.Login {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  background-color: #004040;
+  border: 2px solid #004040;
+  border-radius: 5px;
+}
+
+.Downloads {
+  color: white;
+}
+
+h1 {
+  color: #ffffff;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  align-items: center;
+}
+
+label {
+  margin-bottom: 10px;
+  color: #ffffff;
+  font-size: medium;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="submit"] {
+  padding: 12px;
+  margin-bottom: 20px;
+  transition: border-color 0.5s ease;
+  width: 74%;
+}
+
+input[type="text"],
+input[type="password"] {
+  border: 3px solid #008080;
+  border-radius: 5px;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  outline: none;
+  border-color: #6eecee;
+}
+
+input[type="submit"] {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 14.5px;
+  background-color: #000000;
+  color: #00f0f0;
+  cursor: pointer;
+  border: 3px solid #008080;
+  border-radius: 5px;
+  transition: background-color 0.5s ease;
+  width: 90%;
+}
+
+input[type="submit"]:hover {
+  background-color: #008080;
+}
