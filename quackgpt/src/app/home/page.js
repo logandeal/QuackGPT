@@ -17,6 +17,7 @@ export default function Home() {
   const formRef = useRef(null);
   const inputRef = useRef(null);
   const chatContainerRef = useRef(null);
+  const duckImgRef = useRef(null);
   const {
     messages,
     input,
@@ -46,8 +47,25 @@ export default function Home() {
   }, [messages]);
 
   function handleSendMessage(e, chatRequestOptions) {
+    console.log(duckImgRef.current);
+    console.log(duckImgRef.current)
+    duckImgRef.current.src = './duck_thinking.svg';
+    duckImgRef.current.alt = 'Thinking Duck';
+    console.log(duckImgRef.current)
     handleSubmit(e, chatRequestOptions);
-    inputRef.current.focus(); // Explicitly focus on the input field after sending a message
+    setTimeout(() => {
+      console.log(duckImgRef.current)
+      duckImgRef.current.src = './duck_idea.svg';
+      duckImgRef.current.alt = 'Idea Duck';
+      console.log(duckImgRef.current)
+      inputRef.current.focus(); // Explicitly focus on the input field after sending a message
+      setTimeout(() => {
+        console.log(duckImgRef.current)
+        duckImgRef.current.src = './duck_neutral.svg';
+        duckImgRef.current.alt = 'Neutral Duck';
+        console.log(duckImgRef.current)
+      }, 2000);
+    }, 2000);
   }
 
   // const handleMicrophoneClick = () => {
@@ -176,6 +194,7 @@ If you don't have enough information, ask for it.
 
   return (
     <div className="App">
+      <img className="duckImg" src="./duck_neutral.svg" alt="Neutral Duck" ref={duckImgRef} />
       <div className="topButtons">
         <button onClick={handleBackClick} className="backButton">
           <div className="backBox">
