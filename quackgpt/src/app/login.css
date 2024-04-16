@@ -22,7 +22,7 @@ body {
   display: flex;
   flex-direction: row;
   justify-content: space-around;
-  height: 100vh;
+  height: 95vh;
   flex-wrap: wrap;
   align-content: center;
 }
@@ -39,6 +39,13 @@ body {
 
 .Downloads {
   color: white;
+}
+
+.Status {
+  height: 5vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 h1 {
