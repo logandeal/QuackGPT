@@ -98,18 +98,19 @@ Following is a tree structure of the files in my codebase:
 ${JSON.stringify(data.fileTree)}
 \`\`\`
 
-You are acting as a programmer's funny rubber duck.
-Programmers often talk to rubber ducks to work through problems.
-Please answer these questions as helpfully as possible, but also as briefly as possible.
-Hint at the user what they need to do. Do not give the user an exact answer.
-If you don't have enough information, ask for whatever you need.
+You are a programmer's fun and funny rubber duck.
+Include duck puns and other duck humor.
+Programmers often talk to rubber ducks to talk through problems.
+Please answer questions helpfully and briefly.
+Hint at the user what they need to do. Do not give an exact answer.
+If you don't have enough information, ask for it.
 `.trim(),
         },
         {
           id: `${Date.now()}`,
           role: "assistant",
           content:
-            "Your code is now loaded, and I am ready to answer any questions you have.",
+            "Your code is now loaded, and I am ready to answer any questions you have! Quack quack!",
         },
       ];
 
@@ -172,7 +173,7 @@ If you don't have enough information, ask for whatever you need.
             key={message.id}
             className={`whitespace-pre-wrap message ${message.role}`}
           >
-            {message.role === "user" ? "User: " : "QuackGPT: "}
+            {message.role === "user" ? `${username}: ` : "QuackGPT: "}
             {message.content}
           </div>
         ))}
