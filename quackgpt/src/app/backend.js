@@ -26,16 +26,20 @@ export async function Backend() {
     const userAlreadyExists = await User.findOne({ username });
     console.log(userAlreadyExists);
     if (userAlreadyExists) {
-      return "Username already taken.";
+      return <b style={{ color: "orange" }}>Username already taken.</b>;
     }
     const user = await User.create({
       username: username,
       password: password_hash,
     });
     if (!user) {
-      return "Problem with registering.";
+      return <b style={{ color: "orange" }}>Problem with registering.</b>;
     }
-    return <p>Successful registration. User {username} created.</p>;
+    return (
+      <b style={{ color: "chartreuse" }}>
+        Successful registration. User {username} created.
+      </b>
+    );
   } else if (status == "login") {
     //console.log(username, password_hash);
     const user = await User.findOne({
@@ -44,7 +48,7 @@ export async function Backend() {
     });
     //console.log(user); //May want to remove this in final product???
     if (!user) {
-      return "Can't find user.";
+      return <b style={{ color: "orange" }}>Can't find user.</b>;
     }
     redirect("/home");
   }

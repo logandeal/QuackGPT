@@ -1,7 +1,7 @@
 "use client";
 
-// @ts-ignore
 import React, { useState, useEffect, useRef } from "react";
+import { AudioRecorder, useAudioRecorder } from "react-audio-voice-recorder";
 import "./page.css";
 
 import { useChat } from "ai/react";
@@ -21,12 +21,20 @@ export default function Home() {
   const {
     messages,
     input,
+    setInput,
     handleInputChange,
     handleSubmit,
     append,
     isLoading,
     setMessages,
   } = useChat();
+  const recorderControls = useAudioRecorder(
+    {
+      noiseSuppression: true,
+      echoCancellation: true,
+    },
+    (err) => console.table(err) // onNotAllowedOrFound
+  );
 
   const [isCodebaseTooLarge, setIsCodebaseTooLarge] = useState(false);
 
@@ -85,6 +93,23 @@ export default function Home() {
   //   recognition.start();
   // };
 
+  const handleMicrophoneClick = async (blob) => {
+    const formData = new FormData();
+    formData.append("file", blob, "input.webm");
+
+    const response = await fetch("/api/audio", {
+      method: "POST",
+      body: formData,
+    });
+
+    const responseJson = await response.json();
+    console.log(responseJson);
+
+    if (responseJson.text) {
+      setInput(responseJson.text);
+    }
+  };
+
   useEffect(() => {
     // @ts-ignore
     window.electronAPI.send("request-data", username);
@@ -116,18 +141,19 @@ Following is a tree structure of the files in my codebase:
 ${JSON.stringify(data.fileTree)}
 \`\`\`
 
-You are acting as a programmer's funny rubber duck.
-Programmers often talk to rubber ducks to work through problems.
-Please answer these questions as helpfully as possible, but also as briefly as possible.
-Hint at the user what they need to do. Do not give the user an exact answer.
-If you don't have enough information, ask for whatever you need.
+You are a programmer's fun and funny rubber duck.
+Include duck puns and other duck humor.
+Programmers often talk to rubber ducks to talk through problems.
+Please answer questions helpfully and briefly.
+Hint at the user what they need to do. Do not give an exact answer.
+If you don't have enough information, ask for it.
 `.trim(),
         },
         {
           id: `${Date.now()}`,
           role: "assistant",
           content:
-            "Your code is now loaded, and I am ready to answer any questions you have.",
+            "Your code is now loaded, and I am ready to answer any questions you have! Quack quack!",
         },
       ];
 
@@ -191,7 +217,7 @@ If you don't have enough information, ask for whatever you need.
             key={message.id}
             className={`whitespace-pre-wrap message ${message.role}`}
           >
-            {message.role === "user" ? "User: " : "QuackGPT: "}
+            {message.role === "user" ? `${username}: ` : "QuackGPT: "}
             {message.content}
           </div>
         ))}
@@ -206,6 +232,18 @@ If you don't have enough information, ask for whatever you need.
           >
             🎤
           </button> */}
+          <div className="microphone-button">
+            <AudioRecorder
+              onRecordingComplete={(blob) => {
+                if (!isLoading) {
+                  handleMicrophoneClick(blob);
+                }
+              }}
+              downloadOnSavePress={false}
+              // downloadFileExtension="mp3"
+              showVisualizer={true}
+            />
+          </div>
           <input
             type="text"
             value={input}
