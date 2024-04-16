@@ -18,16 +18,21 @@ if (!app.isPackaged) {
 }
 
 function getAppDataPath() {
-  const homedir = require('os').homedir();
+  const homedir = require("os").homedir();
   switch (process.platform) {
     case "darwin": {
-      return path.join(homedir, "Library", "Application Support", "Data");
+      return path.join(
+        homedir,
+        "Library",
+        "Application Support",
+        "QuackGPTData"
+      );
     }
     case "win32": {
-      return path.join(homedir, "Your app name");
+      return path.join(homedir, "QuackGPTData");
     }
     case "linux": {
-      return path.join(homedir, ".Your app name");
+      return path.join(homedir, ".QuackGPTData");
     }
     default: {
       console.log("Unsupported platform!");
