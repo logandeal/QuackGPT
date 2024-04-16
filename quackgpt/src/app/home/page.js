@@ -1,7 +1,7 @@
 "use client";
 
-// @ts-ignore
 import React, { useState, useEffect, useRef } from "react";
+import { AudioRecorder, useAudioRecorder } from "react-audio-voice-recorder";
 import "./page.css";
 
 import { useChat } from "ai/react";
@@ -20,12 +20,20 @@ export default function Home() {
   const {
     messages,
     input,
+    setInput,
     handleInputChange,
     handleSubmit,
     append,
     isLoading,
     setMessages,
   } = useChat();
+  const recorderControls = useAudioRecorder(
+    {
+      noiseSuppression: true,
+      echoCancellation: true,
+    },
+    (err) => console.table(err) // onNotAllowedOrFound
+  );
 
   const [isCodebaseTooLarge, setIsCodebaseTooLarge] = useState(false);
 
@@ -66,6 +74,23 @@ export default function Home() {
 
   //   recognition.start();
   // };
+
+  const handleMicrophoneClick = async (blob) => {
+    const formData = new FormData();
+    formData.append("file", blob, "input.webm");
+
+    const response = await fetch("/api/audio", {
+      method: "POST",
+      body: formData,
+    });
+
+    const responseJson = await response.json();
+    console.log(responseJson);
+
+    if (responseJson.text) {
+      setInput(responseJson.text);
+    }
+  };
 
   useEffect(() => {
     // @ts-ignore
@@ -188,6 +213,18 @@ If you don't have enough information, ask for it.
           >
             🎤
           </button> */}
+          <div className="microphone-button">
+            <AudioRecorder
+              onRecordingComplete={(blob) => {
+                if (!isLoading) {
+                  handleMicrophoneClick(blob);
+                }
+              }}
+              downloadOnSavePress={false}
+              // downloadFileExtension="mp3"
+              showVisualizer={true}
+            />
+          </div>
           <input
             type="text"
             value={input}
