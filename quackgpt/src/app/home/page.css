@@ -28,7 +28,7 @@ body {
   padding: 10px;
   margin-bottom: 20px;
   border-radius: 10px;
-  background-color: #ffffff;
+  background-color: #FFFFFF;
 }
 
 .message {
@@ -101,7 +101,7 @@ button:disabled {
   border-right: 8px solid #00f0f0;
 }
 
-input[type="text"],
+.input_text,
 button {
   padding: 10px;
   font-size: 16px;
@@ -121,7 +121,7 @@ button {
 }
 
 .microphone-button {
-  color: #ffffff;
+  color: #FFFFFF;
   margin-right: 10px;
   cursor: pointer;
 }
@@ -131,15 +131,15 @@ form {
   flex: 1;
 }
 
-input[type="text"] {
+.input_text {
   flex: 1;
   margin-right: 10px;
-  border: 2px solid #ffffff;
+  border: 2px solid #FFFFFF;
   border-radius: 5px;
   transition: border-color 0.5s ease;
 }
 
-input[type="text"]:focus{
+.input_text:focus{
   outline: none;
   border-color: #00F0F0;
 }

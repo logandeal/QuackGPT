@@ -247,6 +247,7 @@ If you don't have enough information, ask for it.
           <input
             type="text"
             value={input}
+            className="input_text"
             placeholder="Talk to the rubber duck here..."
             onChange={handleInputChange}
             ref={inputRef}
