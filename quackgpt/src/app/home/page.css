@@ -56,6 +56,11 @@ body {
   max-width: 600px;
 }
 
+.duckImg {
+  max-width: 200px;
+  max-height: 200px;
+}
+
 button {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 14.5px;
