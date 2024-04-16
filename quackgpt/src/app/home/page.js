@@ -20,6 +20,7 @@ export default function Home() {
   const {
     messages,
     input,
+    setInput,
     handleInputChange,
     handleSubmit,
     append,
@@ -85,6 +86,10 @@ export default function Home() {
 
     const responseJson = await response.json();
     console.log(responseJson);
+
+    if (responseJson.text) {
+      setInput(responseJson.text);
+    }
   };
 
   useEffect(() => {

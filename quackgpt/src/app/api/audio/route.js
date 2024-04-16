@@ -17,6 +17,6 @@ export async function POST(req) {
   });
 
   return NextResponse.json({
-    text: transcription,
+    text: transcription.text,
   });
 }
