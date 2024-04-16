@@ -2,6 +2,7 @@
 
 // @ts-ignore
 import React, { useState, useEffect, useRef } from "react";
+import { AudioRecorder, useAudioRecorder } from "react-audio-voice-recorder";
 import "./page.css";
 
 import { useChat } from "ai/react";
@@ -26,6 +27,13 @@ export default function Home() {
     isLoading,
     setMessages,
   } = useChat();
+  const recorderControls = useAudioRecorder(
+    {
+      noiseSuppression: true,
+      echoCancellation: true,
+    },
+    (err) => console.table(err) // onNotAllowedOrFound
+  );
 
   const [isCodebaseTooLarge, setIsCodebaseTooLarge] = useState(false);
 
@@ -42,30 +50,9 @@ export default function Home() {
     inputRef.current.focus(); // Explicitly focus on the input field after sending a message
   }
 
-  // const handleMicrophoneClick = () => {
-  //   if (!("webkitSpeechRecognition" in window)) {
-  //     console.error("Speech recognition not supported");
-  //     return;
-  //   }
-
-  //   const recognition = new window.webkitSpeechRecognition();
-  //   recognition.continuous = false;
-  //   recognition.interimResults = false;
-
-  //   recognition.onresult = (event) => {
-  //     const transcript = event.results[0][0].transcript;
-  //     inputRef.current.value = transcript;
-  //     formRef.current.submit();
-  //   };
-
-  //   recognition.onerror = (event) => {
-  //     console.error("Speech recognition error:", event.error);
-  //   };
-
-  //   recognition.onend = () => {};
-
-  //   recognition.start();
-  // };
+  const handleMicrophoneClick = () => {
+    console.log("Audio started.");
+  };
 
   useEffect(() => {
     // @ts-ignore
@@ -179,14 +166,12 @@ If you don't have enough information, ask for whatever you need.
       </div>
       <div className="input-container">
         <form onSubmit={handleSendMessage} ref={formRef}>
-          {/* <button
+          <AudioRecorder
             type="button"
             className="microphone-button"
             onClick={handleMicrophoneClick}
             disabled={isLoading}
-          >
-            🎤
-          </button> */}
+          />
           <input
             type="text"
             value={input}
