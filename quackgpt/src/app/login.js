@@ -16,7 +16,7 @@ export default function LoginOrDownload() {
         <ul>
           <li>
             <a
-              href={`https://github.com/logandeal/QuackGPT/releases/download/v${pkg.version}/quackgpt-darwin-arm64-0.1.0.zip`}
+              href={`https://github.com/logandeal/QuackGPT/releases/download/v${pkg.version}/quackgpt-darwin-arm64-${pkg.version}.zip`}
             >
               Download for Mac
             </a>
