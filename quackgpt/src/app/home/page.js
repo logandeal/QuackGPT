@@ -35,6 +35,7 @@ export default function Home() {
     },
     (err) => console.table(err) // onNotAllowedOrFound
   );
+  let duckBlinkChances = 1;
 
   const [isCodebaseTooLarge, setIsCodebaseTooLarge] = useState(false);
 
@@ -115,6 +116,29 @@ export default function Home() {
   };
 
   useEffect(() => {
+    let blinker = window.setInterval(() => {
+      const blinkVal = Math.random() * 10;
+      if (blinkVal < duckBlinkChances) {
+        console.log('BLINK')
+        duckBlinkChances = 1;
+        const duckImgSrc = duckImgRef.current.src;
+        let duckImgBlinkSrc = duckImgSrc;
+        if (!duckImgSrc.endsWith('_blinking.svg') && duckImgSrc != 'duck_idea.svg') {
+          duckImgBlinkSrc = duckImgSrc.slice(0, -4) + '_blinking.svg';
+          duckImgRef.current.src = duckImgBlinkSrc;
+          window.setTimeout(() => {
+            console.log(duckImgSrc);
+            if (duckImgRef.current.src == duckImgBlinkSrc) {
+              duckImgRef.current.src = duckImgSrc;
+            }
+          }, 250);
+        }
+      }
+      else {
+        duckBlinkChances++;
+      }
+    }, 1000);
+
     // @ts-ignore
     window.electronAPI.send("request-data", username);
 
@@ -127,17 +151,20 @@ export default function Home() {
       }
     });
 
-    // @ts-ignore
-    return window.electronAPI.on("open-file-result", async (event, data) => {
-      setIsCodebaseTooLarge(false);
-      /**
-       * @type {Array<{id: string, role: "function" | "user" | "assistant" | "system" | "data" | "tool", content: string}>}
-       */
-      const messages = [
-        {
-          id: `${CODE_LOAD_ID}`,
-          role: "user",
-          content: `
+    return function cleanup() {
+      window.clearInterval(blinker);
+      
+      // @ts-ignore
+      window.electronAPI.on("open-file-result", async (event, data) => {
+        setIsCodebaseTooLarge(false);
+        /**
+         * @type {Array<{id: string, role: "function" | "user" | "assistant" | "system" | "data" | "tool", content: string}>}
+         */
+        const messages = [
+          {
+            id: `${CODE_LOAD_ID}`,
+            role: "user",
+            content: `
 I want you to answer questions about my codebase.
 Following is a tree structure of the files in my codebase:
 
@@ -152,30 +179,31 @@ Please answer questions helpfully and briefly.
 Hint at the user what they need to do. Do not give an exact answer.
 If you don't have enough information, ask for it.
 `.trim(),
-        },
-        {
-          id: `${Date.now()}`,
-          role: "assistant",
-          content:
-            "Your code is now loaded, and I am ready to answer any questions you have! Quack quack!",
-        },
-      ];
+          },
+          {
+            id: `${Date.now()}`,
+            role: "assistant",
+            content:
+              "Your code is now loaded, and I am ready to answer any questions you have! Quack quack!",
+          },
+        ];
 
-      // TODO: call token API to check if messages goes over context limit with checkContextLimit = true
-      // Check size of codebase limit
-      const response = await fetch("/api/chat?checkContextLimit=true", {
-        method: "POST",
-        body: JSON.stringify({ messages }),
-      });
-      const responseJson = await response.json();
-      console.log(responseJson);
+        // TODO: call token API to check if messages goes over context limit with checkContextLimit = true
+        // Check size of codebase limit
+        const response = await fetch("/api/chat?checkContextLimit=true", {
+          method: "POST",
+          body: JSON.stringify({ messages }),
+        });
+        const responseJson = await response.json();
+        console.log(responseJson);
 
-      if (responseJson.isWithinTokenLimit) {
-        setMessages(messages);
-      } else {
-        setIsCodebaseTooLarge(true);
-      }
-    });
+        if (responseJson.isWithinTokenLimit) {
+          setMessages(messages);
+        } else {
+          setIsCodebaseTooLarge(true);
+        }
+      })
+    };
   }, []);
 
   function handleBackClick() {
