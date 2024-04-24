@@ -151,10 +151,10 @@ export default function Home() {
       }
     });
 
-    // @ts-ignore
     return function cleanup() {
       window.clearInterval(blinker);
       
+      // @ts-ignore
       window.electronAPI.on("open-file-result", async (event, data) => {
         setIsCodebaseTooLarge(false);
         /**
