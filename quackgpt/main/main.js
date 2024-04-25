@@ -1,4 +1,10 @@
-const { app, BrowserWindow, ipcMain, dialog } = require("electron");
+const {
+  app,
+  BrowserWindow,
+  ipcMain,
+  dialog,
+  systemPreferences,
+} = require("electron");
 const serve = require("electron-serve");
 const path = require("path");
 const crypto = require("crypto");
@@ -47,7 +53,7 @@ const appServe = app.isPackaged
     })
   : null;
 
-const createWindow = () => {
+const createWindow = async () => {
   const win = new BrowserWindow({
     width: 800,
     height: 600,
@@ -55,6 +61,9 @@ const createWindow = () => {
       preload: path.join(__dirname, "preload.js"),
     },
   });
+
+  // const microphone = await systemPreferences.askForMediaAccess("microphone");
+  // console.log("microphone:", microphone);
 
   // possible modification to createWindow function
   /*
@@ -72,6 +81,7 @@ const createWindow = () => {
 
   */
 
+  // win.loadURL(server_url + `?microphone=${microphone}`);
   win.loadURL(server_url);
   if (!app.isPackaged) {
     win.webContents.openDevTools();
@@ -101,11 +111,14 @@ const createCredentialCookies = async (win, status, username, password) => {
     url: server_url,
   });
   // Reload so that cookies can be accessed
-  win.loadURL(server_url);
+  await win.loadURL(server_url);
+
+  const microphone = await systemPreferences.askForMediaAccess("microphone");
+  console.log("microphone:", microphone);
 };
 
-app.on("ready", () => {
-  const win = createWindow();
+app.on("ready", async () => {
+  const win = await createWindow();
 
   ipcMain.on("save_messages", async (_, { messages, username }) => {
     const appDatatDirPath = getAppDataPath();
@@ -151,7 +164,7 @@ app.on("ready", () => {
 
   ipcMain.on("open-file-dialog", async (event) => {
     try {
-      const result = await dialog.showOpenDialog(win, {
+      const result = await dialog.showOpenDialog(await win, {
         properties: ["openFile", "openDirectory"],
       });
       if (!result.canceled) {
