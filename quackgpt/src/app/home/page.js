@@ -127,9 +127,11 @@ export default function Home() {
           duckImgBlinkSrc = duckImgSrc.slice(0, -4) + '_blinking.svg';
           duckImgRef.current.src = duckImgBlinkSrc;
           window.setTimeout(() => {
-            console.log(duckImgSrc);
-            if (duckImgRef.current.src == duckImgBlinkSrc) {
-              duckImgRef.current.src = duckImgSrc;
+            if (duckImgRef.current != null) {
+              console.log(duckImgSrc);
+              if (duckImgRef.current.src == duckImgBlinkSrc) {
+                duckImgRef.current.src = duckImgSrc;
+              }
             }
           }, 250);
         }
