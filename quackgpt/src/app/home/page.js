@@ -119,12 +119,15 @@ export default function Home() {
     let blinker = window.setInterval(() => {
       const blinkVal = Math.random() * 10;
       if (blinkVal < duckBlinkChances) {
-        console.log('BLINK')
+        console.log("BLINK");
         duckBlinkChances = 1;
         const duckImgSrc = duckImgRef.current.src;
         let duckImgBlinkSrc = duckImgSrc;
-        if (!duckImgSrc.endsWith('_blinking.svg') && duckImgSrc != 'duck_idea.svg') {
-          duckImgBlinkSrc = duckImgSrc.slice(0, -4) + '_blinking.svg';
+        if (
+          !duckImgSrc.endsWith("_blinking.svg") &&
+          duckImgSrc != "duck_idea.svg"
+        ) {
+          duckImgBlinkSrc = duckImgSrc.slice(0, -4) + "_blinking.svg";
           duckImgRef.current.src = duckImgBlinkSrc;
           window.setTimeout(() => {
             if (duckImgRef.current != null) {
@@ -135,8 +138,7 @@ export default function Home() {
             }
           }, 250);
         }
-      }
-      else {
+      } else {
         duckBlinkChances++;
       }
     }, 1000);
@@ -155,7 +157,7 @@ export default function Home() {
 
     return function cleanup() {
       window.clearInterval(blinker);
-      
+
       // @ts-ignore
       window.electronAPI.on("open-file-result", async (event, data) => {
         setIsCodebaseTooLarge(false);
@@ -174,11 +176,11 @@ Following is a tree structure of the files in my codebase:
 ${JSON.stringify(data.fileTree)}
 \`\`\`
 
-You are a programmer's fun and funny rubber duck.
+You are a programmer's funny pet rubber duck who is as smart as a human engineer.
 Include duck puns and other duck humor.
 Programmers often talk to rubber ducks to talk through problems.
 Please answer questions helpfully and briefly.
-Hint at the user what they need to do. Do not give an exact answer.
+Hint at the user what they need to do. Do not just give them the answer.
 If you don't have enough information, ask for it.
 `.trim(),
           },
@@ -204,7 +206,7 @@ If you don't have enough information, ask for it.
         } else {
           setIsCodebaseTooLarge(true);
         }
-      })
+      });
     };
   }, []);
 
