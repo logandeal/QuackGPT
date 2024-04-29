@@ -38,6 +38,7 @@ export default function Home() {
   let duckBlinkChances = 1;
 
   const [isCodebaseTooLarge, setIsCodebaseTooLarge] = useState(false);
+  const [flipDuck, setFlipDuck] = useState(false);
 
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -47,6 +48,16 @@ export default function Home() {
     }
   }, [messages]);
 
+  useEffect(() => {
+    if (flipDuck) {
+      // If flipDuck is true, apply transform to flip the duck upside down
+      duckImgRef.current.style.transform = "rotateX(180deg)";
+    } else {
+      // If flipDuck is false, reset the transform
+      duckImgRef.current.style.transform = "rotateX(0deg)";
+    }
+  }, [flipDuck]);
+
   function handleSendMessage(e, chatRequestOptions) {
     console.log(duckImgRef.current);
     console.log(duckImgRef.current);
@@ -54,6 +65,13 @@ export default function Home() {
     duckImgRef.current.alt = "Thinking Duck";
     console.log(duckImgRef.current);
     handleSubmit(e, chatRequestOptions);
+    const message = input.toLowerCase(); // Convert input to lowercase for case-insensitive matching
+    if (message.includes("got any grapes")) {
+      // Check if input message contains "got any grapes"
+      setFlipDuck(true); // Set flipDuck to true to flip the duck upside down
+    } else {
+      setFlipDuck(false);
+    }
     setTimeout(() => {
       if (duckImgRef.current != null) {
         console.log(duckImgRef.current);
@@ -71,6 +89,24 @@ export default function Home() {
         }, 2000);
       }
     }, 2000);
+  }
+
+  function rotateDuckHSV() {
+    if (duckImgRef.current) {
+      // Get the current style of the duck image
+      const currentStyle = window.getComputedStyle(duckImgRef.current);
+  
+      // Extract the current hue value from the style
+      const currentFilter = currentStyle.getPropertyValue('filter');
+      const match = /hue-rotate\((\d+)deg\)/.exec(currentFilter);
+      const currentHue = match ? parseInt(match[1]) : 0;
+  
+      // Calculate the new hue value (add 45 degrees and wrap around)
+      const newHue = (currentHue + 45) % 360;
+  
+      // Apply the new hue value to the duck image
+      duckImgRef.current.style.filter = `hue-rotate(${newHue}deg)`;
+  }
   }
 
   // const handleMicrophoneClick = () => {
@@ -234,6 +270,7 @@ If you don't have enough information, ask for it.
         src="./duck_neutral.svg"
         alt="Neutral Duck"
         ref={duckImgRef}
+        onClick={rotateDuckHSV}
       />
       <div className="topButtons">
         <button onClick={handleBackClick} className="backButton">
