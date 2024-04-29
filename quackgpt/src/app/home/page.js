@@ -116,7 +116,7 @@ export default function Home() {
   };
 
   useEffect(() => {
-    let blinker = window.setInterval(() => {
+    window.setInterval(() => {
       const blinkVal = Math.random() * 10;
       if (blinkVal < duckBlinkChances) {
         console.log("BLINK");
@@ -155,20 +155,17 @@ export default function Home() {
       }
     });
 
-    return function cleanup() {
-      window.clearInterval(blinker);
-
-      // @ts-ignore
-      window.electronAPI.on("open-file-result", async (event, data) => {
-        setIsCodebaseTooLarge(false);
-        /**
-         * @type {Array<{id: string, role: "function" | "user" | "assistant" | "system" | "data" | "tool", content: string}>}
-         */
-        const messages = [
-          {
-            id: `${CODE_LOAD_ID}`,
-            role: "user",
-            content: `
+    // @ts-ignore
+    return window.electronAPI.on("open-file-result", async (event, data) => {
+      setIsCodebaseTooLarge(false);
+      /**
+       * @type {Array<{id: string, role: "function" | "user" | "assistant" | "system" | "data" | "tool", content: string}>}
+       */
+      const messages = [
+        {
+          id: `${CODE_LOAD_ID}`,
+          role: "user",
+          content: `
 I want you to answer questions about my codebase.
 Following is a tree structure of the files in my codebase:
 
@@ -183,31 +180,33 @@ Please answer questions helpfully and briefly.
 Hint at the user what they need to do. Do not just give them the answer.
 If you don't have enough information, ask for it.
 `.trim(),
-          },
-          {
-            id: `${Date.now()}`,
-            role: "assistant",
-            content:
-              "Your code is now loaded, and I am ready to answer any questions you have! Quack quack!",
-          },
-        ];
+        },
+        {
+          id: `${Date.now()}`,
+          role: "assistant",
+          content:
+            "Your code is now loaded, and I am ready to answer any questions you have! Quack quack!",
+        },
+      ];
 
-        // TODO: call token API to check if messages goes over context limit with checkContextLimit = true
-        // Check size of codebase limit
-        const response = await fetch("/api/chat?checkContextLimit=true", {
-          method: "POST",
-          body: JSON.stringify({ messages }),
-        });
-        const responseJson = await response.json();
-        console.log(responseJson);
-
-        if (responseJson.isWithinTokenLimit) {
-          setMessages(messages);
-        } else {
-          setIsCodebaseTooLarge(true);
-        }
+      // TODO: call token API to check if messages goes over context limit with checkContextLimit = true
+      // Check size of codebase limit
+      console.log("fetching");
+      const response = await fetch("/api/chat?checkContextLimit=true", {
+        method: "POST",
+        body: JSON.stringify({ messages }),
       });
-    };
+      const responseJson = await response.json();
+      console.log(responseJson);
+
+      if (responseJson.isWithinTokenLimit) {
+        console.log("setting messages");
+        setMessages(messages);
+      } else {
+        console.log("codebase too large");
+        setIsCodebaseTooLarge(true);
+      }
+    });
   }, []);
 
   function handleBackClick() {
