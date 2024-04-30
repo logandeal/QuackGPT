@@ -9,6 +9,7 @@ import { useCookies } from "react-cookie";
 import { useRouter } from "next/navigation";
 
 const CODE_LOAD_ID = "code_load";
+const INIT_DUCK_ID = "duck";
 
 export default function Home() {
   const router = useRouter();
@@ -116,7 +117,29 @@ export default function Home() {
   };
 
   useEffect(() => {
-    window.setInterval(() => {
+    if (messages.length == 0) {
+      setMessages([
+        {
+          id: `${CODE_LOAD_ID}`,
+          role: "user",
+          content: `
+        You are a programmer's funny pet rubber duck who is as smart as a human engineer.
+Include duck puns and other duck humor.
+Programmers often talk to rubber ducks to talk through problems.
+Please answer questions helpfully and briefly.
+Hint at the user what they need to do. Do not just give them the answer.
+If you don't have enough information, ask for it.
+        `,
+        },
+        {
+          id: `${Date.now()}`,
+          role: "assistant",
+          content: "Welcome to QuackGPT!",
+        },
+      ]);
+    }
+
+    let blinker = window.setInterval(() => {
       const blinkVal = Math.random() * 10;
       if (blinkVal < duckBlinkChances) {
         console.log("BLINK");
@@ -156,7 +179,7 @@ export default function Home() {
     });
 
     // @ts-ignore
-    return window.electronAPI.on("open-file-result", async (event, data) => {
+    window.electronAPI.on("open-file-result", async (event, data) => {
       setIsCodebaseTooLarge(false);
       /**
        * @type {Array<{id: string, role: "function" | "user" | "assistant" | "system" | "data" | "tool", content: string}>}
@@ -207,6 +230,10 @@ If you don't have enough information, ask for it.
         setIsCodebaseTooLarge(true);
       }
     });
+
+    return () => {
+      window.clearInterval(blinker);
+    };
   }, []);
 
   function handleBackClick() {
@@ -224,7 +251,7 @@ If you don't have enough information, ask for it.
   }
 
   const filteredMessages = messages.filter(
-    (message) => message.id !== CODE_LOAD_ID
+    (message) => message.id !== CODE_LOAD_ID && message.id !== INIT_DUCK_ID
   );
 
   return (
