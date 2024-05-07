@@ -14,6 +14,7 @@ function isWithinTokenLimit(model, messages, maxContext) {
     model,
     messages,
   });
+  console.log(messages);
   console.log(gptTokens.usedTokens);
   return gptTokens.usedTokens < maxContext;
 }

@@ -10,6 +10,7 @@ import { useRouter } from "next/navigation";
 
 const CODE_LOAD_ID = "code_load";
 const INIT_DUCK_ID = "duck";
+const SYSTEM_ID = "system_context";
 
 export default function Home() {
   const router = useRouter();
@@ -41,6 +42,7 @@ export default function Home() {
   const [isCodebaseTooLarge, setIsCodebaseTooLarge] = useState(false);
   const [flipDuck, setFlipDuck] = useState(false);
   const [contextOpen, setContextOpen] = useState(false);
+  const [contextText, setContextText] = useState("");
 
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -59,6 +61,10 @@ export default function Home() {
       duckImgRef.current.style.transform = "rotateX(0deg)";
     }
   }, [flipDuck]);
+
+  const handleContextTextChange = (event) => {
+    setContextText(event.target.value);
+  };
 
   function handleSendMessage(e, chatRequestOptions) {
     console.log(duckImgRef.current);
@@ -212,6 +218,11 @@ If you don't have enough information, ask for it.
       if (data != undefined) {
         let oldMessages = JSON.parse(data);
         setMessages(oldMessages);
+        const systemMessage = oldMessages.find((msg) => msg.id === SYSTEM_ID);
+        console.log(systemMessage);
+        if (systemMessage) {
+          setContextText(systemMessage.content);
+        }
       }
     });
 
@@ -288,7 +299,10 @@ If you don't have enough information, ask for it.
   }
 
   const filteredMessages = messages.filter(
-    (message) => message.id !== CODE_LOAD_ID && message.id !== INIT_DUCK_ID
+    (message) =>
+      message.id !== CODE_LOAD_ID &&
+      message.id !== INIT_DUCK_ID &&
+      message.id !== SYSTEM_ID
   );
 
   return (
@@ -376,11 +390,33 @@ If you don't have enough information, ask for it.
       {contextOpen && (
         <div className="context-container">
           <textarea
-            value={input}
+            value={contextText}
             className="context_text"
             placeholder="Enter context here..."
             rows={3}
+            onChange={handleContextTextChange}
           ></textarea>
+          <button
+            className="contextButton"
+            onClick={() => {
+              if (contextText.length > 0) {
+                const filteredItems = messages.filter(
+                  (msg) => msg.id !== SYSTEM_ID
+                );
+                setMessages([
+                  ...filteredItems,
+                  {
+                    id: `${SYSTEM_ID}`,
+                    role: "system",
+                    content: contextText,
+                  },
+                ]);
+                setContextOpen(false);
+              }
+            }}
+          >
+            Submit
+          </button>
         </div>
       )}
     </div>
