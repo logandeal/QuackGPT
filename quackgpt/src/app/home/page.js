@@ -40,6 +40,7 @@ export default function Home() {
 
   const [isCodebaseTooLarge, setIsCodebaseTooLarge] = useState(false);
   const [flipDuck, setFlipDuck] = useState(false);
+  const [contextOpen, setContextOpen] = useState(false);
 
   useEffect(() => {
     if (chatContainerRef.current) {
@@ -96,18 +97,18 @@ export default function Home() {
     if (duckImgRef.current) {
       // Get the current style of the duck image
       const currentStyle = window.getComputedStyle(duckImgRef.current);
-  
+
       // Extract the current hue value from the style
-      const currentFilter = currentStyle.getPropertyValue('filter');
+      const currentFilter = currentStyle.getPropertyValue("filter");
       const match = /hue-rotate\((\d+)deg\)/.exec(currentFilter);
       const currentHue = match ? parseInt(match[1]) : 0;
-  
+
       // Calculate the new hue value (add 45 degrees and wrap around)
       const newHue = (currentHue + 45) % 360;
-  
+
       // Apply the new hue value to the duck image
       duckImgRef.current.style.filter = `hue-rotate(${newHue}deg)`;
-  }
+    }
   }
 
   // const handleMicrophoneClick = () => {
@@ -156,7 +157,7 @@ export default function Home() {
     if (messages.length == 0) {
       setMessages([
         {
-          id: `${CODE_LOAD_ID}`,
+          id: `${INIT_DUCK_ID}`,
           role: "user",
           content: `
         You are a programmer's funny pet rubber duck who is as smart as a human engineer.
@@ -365,7 +366,23 @@ If you don't have enough information, ask for it.
             {isLoading ? "Loading..." : "Send"}
           </button>
         </form>
+        <button
+          className="contextButton"
+          onClick={() => setContextOpen(!contextOpen)}
+        >
+          {contextOpen ? "Close Context" : "Open Context"}
+        </button>
       </div>
+      {contextOpen && (
+        <div className="context-container">
+          <textarea
+            value={input}
+            className="context_text"
+            placeholder="Enter context here..."
+            rows={3}
+          ></textarea>
+        </div>
+      )}
     </div>
   );
 }

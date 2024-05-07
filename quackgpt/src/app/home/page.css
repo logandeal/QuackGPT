@@ -28,7 +28,7 @@ body {
   padding: 10px;
   margin-bottom: 20px;
   border-radius: 10px;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
 }
 
 .message {
@@ -54,9 +54,11 @@ body {
   align-items: center;
   width: 100%;
   max-width: 600px;
+  margin-bottom: 20px;
 }
 
 .duckImg {
+  margin-top: 10px;
   max-width: 200px;
   max-height: 200px;
 }
@@ -102,6 +104,7 @@ button:disabled {
 }
 
 .input_text,
+.context_text,
 button {
   padding: 10px;
   font-size: 16px;
@@ -121,8 +124,13 @@ button {
 }
 
 .microphone-button {
-  color: #FFFFFF;
+  color: #ffffff;
   margin-right: 10px;
+  cursor: pointer;
+}
+
+.contextButton {
+  margin-left: 10px;
   cursor: pointer;
 }
 
@@ -131,15 +139,38 @@ form {
   flex: 1;
 }
 
+textarea {
+  font-family: inherit;
+}
+
 .input_text {
   flex: 1;
   margin-right: 10px;
-  border: 2px solid #FFFFFF;
+  border: 2px solid #ffffff;
   border-radius: 5px;
   transition: border-color 0.5s ease;
+  height: 500;
 }
 
-.input_text:focus{
+.context-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 20px;
+  height: 5;
+}
+
+.context_text {
+  flex: 1;
+  border: 2px solid #ffffff;
+  border-radius: 5px;
+  transition: border-color 0.5s ease;
+  padding: 8px;
+}
+
+.input_text:focus,
+.context_text:focus {
   outline: none;
-  border-color: #00F0F0;
+  border-color: #00f0f0;
 }
