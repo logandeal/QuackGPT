@@ -221,7 +221,11 @@ If you don't have enough information, ask for it.
         const systemMessage = oldMessages.find((msg) => msg.id === SYSTEM_ID);
         console.log(systemMessage);
         if (systemMessage) {
-          setContextText(systemMessage.content);
+          const contentWithoutExtraInfo = systemMessage.content.replace(
+            "Here is context provided by the user. Respond to the user based on it.\n",
+            ""
+          );
+          setContextText(contentWithoutExtraInfo);
         }
       }
     });
@@ -408,7 +412,9 @@ If you don't have enough information, ask for it.
                   {
                     id: `${SYSTEM_ID}`,
                     role: "system",
-                    content: contextText,
+                    content:
+                      "Here is context provided by the user. Respond to the user based on it.\n" +
+                      contextText,
                   },
                 ]);
                 setContextOpen(false);

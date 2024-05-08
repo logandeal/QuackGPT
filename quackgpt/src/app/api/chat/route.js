@@ -14,7 +14,6 @@ function isWithinTokenLimit(model, messages, maxContext) {
     model,
     messages,
   });
-  console.log(messages);
   console.log(gptTokens.usedTokens);
   return gptTokens.usedTokens < maxContext;
 }
@@ -55,6 +54,8 @@ export async function POST(req) {
   if (model == null) {
     throw new Error("Stop here please");
   }
+
+  console.log("about to send:", messages);
 
   // Ask OpenAI for a streaming chat completion given the prompt
   const response = await openai.chat.completions.create({
