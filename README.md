@@ -12,15 +12,15 @@ QuackGPT is an rubber duck-themed interactive and customizable coding assistant.
 
 **Frontend**:
 
-Electron - Chromium and Node.js
-React
-Next.js
+- Electron - Chromium and Node.js
+- React
+- Next.js
 
 **Backend**:
 
-Next.js
-MongoDB
-Vercel (AI SDK and server)
+- Next.js
+- MongoDB
+- Vercel (AI SDK and server)
 
 _We have a talking duck. Don't ruffle its feathers. Or else it may bite you. Nom nom nom._
 
