@@ -1,14 +1,14 @@
 # QuackGPT
 
-QuackGPT is an rubber duck-themed interactive and customizable coding assistant.
+QuackGPT is an interactive, customizable, and rubber duck themed coding assistant.
 
 **Why?**
 
-- Help you understand your code
-- Help you know what to do next
-- You learn things
-- The duck can see all your code!
-- 24/7 teaching assistant
+- Helps you understand your code.
+- Helps you know what to do next.
+- You get to learn things.
+- The duck can see all of your code!
+- 24/7 teaching assistant.
 
 **Frontend**:
 
