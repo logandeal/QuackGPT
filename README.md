@@ -2,11 +2,13 @@
 
 QuackGPT is an interactive, customizable, and rubber duck themed coding assistant.
 
+Think **Claude Code**, except it forces you to learn, think critically, and doesn't hand you an answer on a silver platter.
+
 **Why?**
 
 - Helps you understand your code.
 - Helps you know what to do next.
-- You get to learn things.
+- You get to actually learn things.
 - The duck can see all of your code!
 - 24/7 teaching assistant.
 
@@ -22,5 +24,5 @@ QuackGPT is an interactive, customizable, and rubber duck themed coding assistan
 - MongoDB
 - Vercel (AI SDK and server)
 
-_We have a talking duck. Don't ruffle its feathers. Or else it may bite you. Nom nom nom._
+_We have a talking duck. Don't ruffle its feathers. Or else it may bite you. Nom nom nom..._
 
