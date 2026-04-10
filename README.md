@@ -3,6 +3,7 @@
 QuackGPT is an interactive, customizable, and rubber duck themed coding assistant.
 
 This project pre-dated **Claude Code**,
+
 but think **Claude Code**, except it forces you to learn, think critically, and doesn't hand you an answer on a silver platter.
 
 **Why?**
